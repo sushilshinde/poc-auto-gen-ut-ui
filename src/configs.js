@@ -1,5 +1,10 @@
 export const languageOption = [
-
+    {
+        id: 63,
+        name: "JavaScript (Node.js)",
+        label: "JavaScript (Node.js)",
+        value: "javascript",
+    },
 ]
 
 export const themes = [

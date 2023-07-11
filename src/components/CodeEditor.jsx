@@ -2,27 +2,20 @@ import React, { useState } from "react";
 
 import Editor from "@monaco-editor/react";
 import LanguagesDropdown from "./LanguageDropDown";
-
-const languageOptions = [
-    {
-      id: 63,
-      name: "JavaScript (Node.js 12.14.0)",
-      label: "JavaScript (Node.js 12.14.0)",
-      value: "javascript",
-    },];
+import { languageOption } from "../configs";
 
 const CodeEditor = ({ onChange, code, theme, onValidate }) => {
-  const [editorLanguage, setEditorLanguage] = useState(languageOptions[0])
+  const [editorLanguage, setEditorLanguage] = useState(languageOption[0])
 
   return (
-    <div className="overlay rounded-md overflow-hidden w-full h-full shadow-4xl col-span-5">
+    <div className="overlay rounded-md overflow-hidden w-full h-full shadow-4xl">
         <LanguagesDropdown onSelectChange={(data) => setEditorLanguage(data)}/>
       <Editor
-      height={'50vh'}
-        language={editorLanguage.value || "javascript"}
+      height={'86.5vh'}
+        language={editorLanguage?.value || "javascript"}
         value={code}
         theme={theme.value}
-        defaultValue="// some comment"
+        defaultValue="// Write some code here...."
         onChange={onChange}
         onValidate={onValidate}
       />

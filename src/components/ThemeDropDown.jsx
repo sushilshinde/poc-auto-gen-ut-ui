@@ -5,7 +5,7 @@ import { themes } from "../configs";
 const ThemeDropdown = ({ handleThemeChange, theme }) => {
 	return (
 		<Select
-			className="col-span-1 theme-btn"
+			className="theme-btn"
 			placeholder={`Select Theme`}
 			options={themes}
 			value={theme}

@@ -32,10 +32,12 @@ const Main = () => {
 	const submitCodeHandler = () => {
 		if (error.message) {
 			setError({ ...error, show: true })
+			// if(!value.trim()) setError({ ...error, message: ''})
 			setTimeout(() => setError({ ...error, show: false }), 5000);
 			return;
 		} else {
 			setError({ message: '', show: false })
+			setTestcases(null)
 
 			setLoading(true);
 			fetch(API_BASE_URL + "/openai/generate-response", {
@@ -60,17 +62,30 @@ const Main = () => {
 
 
 	return (
-		<div className="container">
+		<div>
 			<Alert message={error.message} show={error.show} variant='red' />
 			<Alert message={'Code Copied!'} show={copied} />
-			<h1 className='font-bold underline'>Generate Unit Test Cases</h1>
-			<div className="mt-5 grid grid-cols-12 gap-2 border-t border-gray-200 pt-10">
+			<div className="w-screen flex border-t border-gray-200" style={{ height: '86.9vh' }}>
 				<CodeEditor onChange={handleEditorChange} code={value} onValidate={handleEditorValidation} theme={theme} />
-				<button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-1 rounded col-span-1" onClick={submitCodeHandler} disabled={loading}><span className='custom-btn'>{loading ? 'Loading....' : 'Generate Test Case'}</span></button>
+				<button className={`bg-${loading || !value.trim() ? 'zinc' : 'blue'}-500 hover:bg-${loading || !value.trim() ? 'zinc' : 'blue'}-700 text-white font-bold py-2 px-1 rounded`} onClick={submitCodeHandler} disabled={loading || !value.trim()}><span className='custom-btn'>{loading ? 'Loading....' : 'Generate Test Case'}</span></button>
+				{
+					loading ? <div className="overlay rounded-md overflow-hidden w-full h-full shadow-4xl">
+						<div
+							className="inline-block h-20 w-20 animate-spin rounded-full border-4 border-solid border-current border-r-transparent align-[-0.125em] motion-reduce:animate-[spin_1.5s_linear_infinite]"
+							role="status" style={{ position: 'relative', top: '40%' }}>
+							<span
+								className="!absolute !-m-px !h-px !w-px !overflow-hidden !whitespace-nowrap !border-0 !p-0 ![clip:rect(0,0,0,0)]"
+							>Loading...</span
+							>
+						</div>
+					</div> : (
 
-				<Editor value={testcases ? testcases : 'Unit Test Case'} className="overlay rounded-md overflow-hidden w-full h-full shadow-4xl col-span-5" width={'40rem'} theme={theme.value} />
+						<Editor language="javascript" value={testcases ? testcases : "// See your output here..."} className="overlay rounded-md overflow-hidden w-full h-full shadow-4xl" height={'86.5vh'} theme={theme.value} defaultValue="// See your output here..."/>
+
+					)
+				}
 			</div>
-			<button className="bg-green-500 border-green-200 text-white font-bold py-2 px-1 rounded col-span-1 copy-btn" onClick={() => {
+			<button className="bg-blue-300 border border-green-400 text-white pill font-bold py-2 px-1 rounded col-span-1 copy-btn" onClick={() => {
 				navigator.clipboard.writeText(testcases);
 				setCopied(true);
 				setTimeout(() => setCopied(false), 5000)
